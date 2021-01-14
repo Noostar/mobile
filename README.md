@@ -1,16 +1,12 @@
 # mobile
+A flutter app for Noostar.
 
-A new Flutter project.
+# Example app
+Layers of the app.
+Application - contains blocs (flutter_bloc)
+Presentation - contains all files, which related to the view.
+Infrastructure - contains all data providers, repositories, etc.
+Domain - business logic, converting DTO to internal classes, error handling and converting to custom classes.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You can read more about this architecture in simple words at the link:
+https://resocoder.com/2020/03/09/flutter-firebase-ddd-course-1-domain-driven-design-principles/
