@@ -53,18 +53,48 @@ class CourseDetails extends StatelessWidget {
                   color: const Color(0xffC4C4C4),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('Rating: 4.83'),
-                    Text('Price: 10\$'),
-                    _BuyButton(),
-                  ],
+                const Expanded(
+                  child: SingleChildScrollView(
+                    child: _CourseDescription(),
+                  ),
                 ),
               ],
             ),
           ),
         ),
+      );
+}
+
+class _CourseDescription extends StatelessWidget {
+  const _CourseDescription({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Rating: 4.83'),
+              Text('Price: 10\$'),
+              _BuyButton(),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text('''Duration: 10 hrs.
+          
+Authors: Author1, Author2 ...
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+
+Start skills:
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
+
+Final skills:
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
+''')
+        ],
       );
 }
 
