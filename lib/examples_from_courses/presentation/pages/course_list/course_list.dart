@@ -47,8 +47,8 @@ class _CourseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView.count(
         primary: false,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 11,
+        crossAxisSpacing: 21,
+        mainAxisSpacing: 22,
         crossAxisCount: 2,
         padding: const EdgeInsets.only(
           bottom: 75,
@@ -74,8 +74,6 @@ class _CourseListItem extends StatelessWidget {
           alignment: AlignmentDirectional.bottomStart,
           children: <Widget>[
             Container(
-              height: 167,
-              width: 167,
               color: const Color(0xFFC4C4C4),
               alignment: Alignment.bottomLeft,
               padding: const EdgeInsets.only(
@@ -93,7 +91,7 @@ class _CourseListItem extends StatelessWidget {
             ),
             Container(
               height: 11,
-              width: 167,
+              width: double.infinity,
               color: const Color(0xFF81c54b),
               child: progress,
             ),
