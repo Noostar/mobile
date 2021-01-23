@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: RecoveryPassword(),
-      );
-}
-
 class RecoveryPassword extends StatelessWidget {
   const RecoveryPassword({Key key}) : super(key: key);
 
