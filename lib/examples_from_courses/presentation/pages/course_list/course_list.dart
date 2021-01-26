@@ -57,7 +57,7 @@ class _CourseList extends StatelessWidget {
           6,
           (index) => _CourseListItem(
             title: 'Course $index',
-            progress: const Percent(value: 100),
+            progress: Percent(100),
           ),
         ),
       );
@@ -93,21 +93,21 @@ class _CourseListItem extends StatelessWidget {
               height: 11,
               width: double.infinity,
               color: const Color(0xFF81c54b),
-              child: progress,
+              child: Text(
+                progress.getPercent(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 10),
+              ),
             ),
           ],
         ),
       );
 }
 
-class Percent extends StatelessWidget {
-  final int value;
-  const Percent({Key key, this.value}) : super(key: key);
+class Percent {
+  final double value;
+  Percent(this.value);
 
-  @override
-  Widget build(BuildContext context) => Text(
-        '$value%',
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 10),
-      );
+  String getPercent() =>
+      value == value.round() ? '${value.round()}%' : '${value}%';
 }
