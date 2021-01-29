@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/examples_from_courses/presentation/widgets/app_bar_content.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetailsData {
@@ -30,9 +31,9 @@ class CourseDetails extends StatelessWidget {
   Widget build(BuildContext context) => Provider.value(
         value: inputData,
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Course details'),
-          ),
+          // appBar: AppBar(
+          //   title: const NoostarAppBarContent(),
+          // ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
