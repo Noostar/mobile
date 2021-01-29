@@ -21,4 +21,19 @@ class CourseDetailsState {
           isBought: false,
           description: '',
         );
+
+  CourseDetailsState copyWith({
+    String name,
+    double rating,
+    double price,
+    bool isBought,
+    String description,
+  }) =>
+      CourseDetailsState(
+        name: name ?? this.name,
+        rating: rating ?? this.rating,
+        price: price ?? this.price,
+        isBought: isBought ?? this.isBought,
+        description: description ?? this.description,
+      );
 }
