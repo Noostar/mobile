@@ -41,9 +41,14 @@ class CourseListPage extends StatelessWidget {
       );
 }
 
-class _CourseList extends StatelessWidget {
+class _CourseList extends StatefulWidget {
   const _CourseList({Key key}) : super(key: key);
 
+  @override
+  __CourseListState createState() => __CourseListState();
+}
+
+class __CourseListState extends State<_CourseList> {
   @override
   Widget build(BuildContext context) => GridView.count(
         primary: false,
@@ -54,9 +59,9 @@ class _CourseList extends StatelessWidget {
           bottom: 75,
         ),
         children: List.generate(
-          6,
+          20,
           (index) => _CourseListItem(
-            title: 'Course $index',
+            title: 'Course ${index + 1}',
             progress: Percent(100),
           ),
         ),
