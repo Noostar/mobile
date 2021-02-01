@@ -3,12 +3,16 @@ class CourseListState {
   final bool isLoading;
   final bool hasMore;
 
-  CourseListState({this.courseItems, this.isLoading, this.hasMore});
+  CourseListState({
+    this.courseItems,
+    this.isLoading,
+    this.hasMore,
+  });
 
   CourseListState.initial()
       : this(
-          courseItems: List.generate(20, (i) => 'Course ${i + 1}'),
-          isLoading: true,
+          courseItems: [],
+          isLoading: false,
           hasMore: true,
         );
   CourseListState copyWith({

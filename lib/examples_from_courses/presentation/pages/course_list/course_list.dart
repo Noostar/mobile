@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_state.dart';
 
 class CourseListPage extends StatelessWidget {
   const CourseListPage({Key key}) : super(key: key);
@@ -49,20 +52,41 @@ class _CourseList extends StatefulWidget {
 }
 
 class __CourseListState extends State<_CourseList> {
+  final itemList = [];
+  final CourseListBloc _bloc = CourseListBloc();
   @override
-  Widget build(BuildContext context) => GridView.count(
-        primary: false,
-        crossAxisSpacing: 21,
-        mainAxisSpacing: 22,
-        crossAxisCount: 2,
-        padding: const EdgeInsets.only(
-          bottom: 75,
-        ),
-        children: List.generate(
-          20,
-          (index) => _CourseListItem(
-            title: 'Course ${index + 1}',
-            progress: Percent(100),
+  Widget build(BuildContext context) => StreamBuilder(
+        stream: _bloc.stateStream,
+        initialData: CourseListState.initial(),
+        builder: (context, snapshot) => GridView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= snapshot.data.courseItems.length) {
+              if (!snapshot.data.isLoading) {
+                _bloc.addEvent(GetMoreData());
+              }
+              return const Center(
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return _CourseListItem(
+              title: snapshot.data.courseItems[index],
+              progress: Percent(100),
+            );
+          },
+          itemCount: snapshot.data.hasMore
+              ? snapshot.data.courseItems.length + 1
+              : snapshot.data.courseItems.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 21,
+            mainAxisSpacing: 22,
+          ),
+          padding: const EdgeInsets.only(
+            bottom: 75,
           ),
         ),
       );
