@@ -21,11 +21,10 @@ class CourseListBloc {
     if (event is GetMoreData) {
       List<String> newItems = [];
       final prevState = _stateController.value;
-      final items = newCourseItems(prevState.courseItems.length);
-
-      newItems.addAll(prevState.courseItems);
-      // ignore: cascade_invocations
-      newItems.addAll(items);
+      newItems.addAll([
+        ...prevState.courseItems,
+        ..._newCourseItems(),
+      ]);
 
       if (newItems.length == _finalCount) {
         _hasMore = false;
@@ -47,11 +46,13 @@ class CourseListBloc {
     }
   }
 
-  List<String> newCourseItems(int lastIndex) {
+  List<String> _newCourseItems() {
+    final lastIndex = _currentPage * _itemsPerPage + 1;
     final list = <String>[];
-    final n = min(_itemsPerPage, _finalCount - _currentPage * _itemsPerPage);
-    for (var i = lastIndex; i < lastIndex + n; i++) {
-      list.add('Course ${i + 1}');
+    final itemsToDownloadCount =
+        min(_itemsPerPage, _finalCount - _currentPage * _itemsPerPage);
+    for (var i = lastIndex; i < lastIndex + itemsToDownloadCount; i++) {
+      list.add('Course ${i}');
     }
     return list;
   }
