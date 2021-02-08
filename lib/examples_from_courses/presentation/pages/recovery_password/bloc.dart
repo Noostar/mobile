@@ -1,15 +1,14 @@
 import 'package:rxdart/rxdart.dart';
 
 class RecoveryPasswordBloc {
-  final _inputController = BehaviorSubject<RecoveryPasswordState>();
+  final _inputController = BehaviorSubject<RecoveryPasswordState>.seeded(
+    RecoveryPasswordState.initial('', false),
+  );
   Stream<RecoveryPasswordState> get stateStream => _inputController.stream;
 
   void add({String email, bool isSumbitted}) {
-    if (_inputController.value == null)
-      _inputController.add(RecoveryPasswordState(email, false));
-    else
-      _inputController.add(_inputController.value
-          .copyWith(email: email, isSumbitted: isSumbitted));
+    _inputController.add(_inputController.value
+        .copyWith(email: email, isSumbitted: isSumbitted));
   }
 
   void dispose() {
@@ -19,6 +18,7 @@ class RecoveryPasswordBloc {
 
 class RecoveryPasswordState {
   RecoveryPasswordState(this.email, this.isSumbitted);
+  RecoveryPasswordState.initial(this.email, this.isSumbitted);
 
   final String email;
   final bool isSumbitted;

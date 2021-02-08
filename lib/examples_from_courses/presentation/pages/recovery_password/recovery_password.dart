@@ -9,29 +9,35 @@ class RecoveryPassword extends StatefulWidget {
 }
 
 class _RecoveryPasswordState extends State<RecoveryPassword> {
-  final _emailController = TextEditingController();
   final _block = RecoveryPasswordBloc();
 
   @override
   void initState() {
     super.initState();
 
-    _emailController.addListener(() {
-      _block.add(email: _emailController.text);
-    });
-
     _block.stateStream.listen(
       (value) {
-        print(value.email);
-
         if (value.isSumbitted) {
           showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
+              actions: [
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'Ok');
+                  },
+                  child: const Text('Ok'),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'Cancel');
+                  },
+                  child: const Text('Cancel'),
+                )
+              ],
               content: Text('You typed: ${value.email}'),
             ),
-          );
-
+          ).then(print);
           _block.add(isSumbitted: false);
         }
       },
@@ -75,11 +81,13 @@ recovery:''',
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    controller: _emailController,
                     decoration: const InputDecoration(
                       hintText: 'Write your email here',
                       fillColor: Color(0xffC4C4C4),
                     ),
+                    onChanged: (val) {
+                      _block.add(email: val);
+                    },
                   ),
                   const SizedBox(height: 60),
                   Align(
@@ -104,4 +112,10 @@ recovery:''',
           ),
         ),
       );
+
+  @override
+  void dispose() {
+    _block.dispose();
+    super.dispose();
+  }
 }
