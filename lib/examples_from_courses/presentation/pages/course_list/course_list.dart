@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
-import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_state.dart';
 
 class CourseListPage extends StatelessWidget {
   const CourseListPage({Key key}) : super(key: key);
@@ -44,21 +43,26 @@ class CourseListPage extends StatelessWidget {
       );
 }
 
-class _CourseList extends StatefulWidget {
+class _CourseList extends StatelessWidget {
   const _CourseList({Key key}) : super(key: key);
 
   @override
-  __CourseListState createState() => __CourseListState();
-}
+  Widget build(BuildContext context) {
+    final _bloc = CourseListBloc();
 
-class __CourseListState extends State<_CourseList> {
-  final itemList = [];
-  final CourseListBloc _bloc = CourseListBloc();
-  @override
-  Widget build(BuildContext context) => StreamBuilder(
-        stream: _bloc.stateStream,
-        initialData: CourseListState.initial(),
-        builder: (context, snapshot) => GridView.builder(
+    return StreamBuilder(
+      stream: _bloc.stateStream,
+      builder: (context, snapshot) {
+        var itemCount = 0;
+        if (snapshot.data != null) {
+          if (snapshot.data.hasMore) {
+            itemCount = snapshot.data.courseItems.length + 1;
+          } else {
+            itemCount = snapshot.data.courseItems.length;
+          }
+        }
+
+        return GridView.builder(
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data.courseItems.length) {
               if (!snapshot.data.isLoading) {
@@ -77,9 +81,7 @@ class __CourseListState extends State<_CourseList> {
               progress: Percent(100),
             );
           },
-          itemCount: snapshot.data.hasMore
-              ? snapshot.data.courseItems.length + 1
-              : snapshot.data.courseItems.length,
+          itemCount: itemCount,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 21,
@@ -88,8 +90,10 @@ class __CourseListState extends State<_CourseList> {
           padding: const EdgeInsets.only(
             bottom: 75,
           ),
-        ),
-      );
+        );
+      },
+    );
+  }
 }
 
 class _CourseListItem extends StatelessWidget {
