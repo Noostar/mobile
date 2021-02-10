@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_bloc.dart';
+import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_state.dart';
+import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_events.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetailsData {
@@ -18,10 +22,6 @@ class CourseDetailsData {
   });
 }
 
-extension CourseDetailsDataDisplayMethods on CourseDetailsData {
-  String get boughtStatus => isBought ? 'Open' : 'Buy';
-}
-
 class CourseDetails extends StatefulWidget {
   final CourseDetailsData inputData;
 
@@ -32,7 +32,6 @@ class CourseDetails extends StatefulWidget {
 }
 
 class _CourseDetailsState extends State<CourseDetails> {
-  String test = 'Hello';
   @override
   Widget build(BuildContext context) => Provider.value(
         value: widget.inputData,
@@ -40,8 +39,8 @@ class _CourseDetailsState extends State<CourseDetails> {
           // appBar: AppBar(
           //   title: const NoostarAppBarContent(),
           // ),
-          body: Provider.value(
-            value: test,
+          body: BlocProvider<CourseDetailsBloc>(
+            create: (context) => CourseDetailsBloc(widget.inputData),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -85,10 +84,29 @@ class _CourseDescription extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Rating: 4.83'),
-              Text('Price: 10\$'),
-              _BuyButton(),
+            children: [
+              const Text('Rating: 4.83'),
+              const Text('Price: 10\$'),
+              BlocBuilder<CourseDetailsBloc, CourseDetailsState>(
+                builder: (context, state) => GestureDetector(
+                  onTap: () {
+                    state.isBought
+                        ? context
+                            .read<CourseDetailsBloc>()
+                            .add(const CourseDetailsEvent.open())
+                        : context
+                            .read<CourseDetailsBloc>()
+                            .add(const CourseDetailsEvent.buy());
+                  },
+                  child: Container(
+                    width: 125,
+                    height: 28,
+                    alignment: Alignment.center,
+                    color: const Color(0xff71FF98),
+                    child: Text(state.boughtStatus),
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -106,63 +124,4 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 ''')
         ],
       );
-}
-
-class _BuyButton extends StatefulWidget {
-  const _BuyButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _BuyButtonState createState() => _BuyButtonState();
-}
-
-class _BuyButtonState extends State<_BuyButton> {
-  @override
-  Widget build(BuildContext context) {
-    final courseData = Provider.of<CourseDetailsData>(context, listen: false);
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          // Inversion
-          courseData.isBought = !courseData.isBought;
-        });
-      },
-      child: Container(
-        width: 125,
-        height: 28,
-        alignment: Alignment.center,
-        color: const Color(0xff71FF98),
-        child: Text(courseData.boughtStatus),
-      ),
-    );
-  }
-
-
-}
-
-class TestModel{
-  void test(){
-
-    final model = Model();
-
-    final result = model.makeRequest();
-
-    assert(result == true);
-  }
-}
-
-class Model {
-  final DataSource _dataSource;
-
-  Model(this._dataSource);
-
-  bool makeRequest(){
-    _dataSource.generateBool();
-  }
-}
-
-abstract class DataSource {
-  bool generateBool();
 }
