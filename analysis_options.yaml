@@ -109,6 +109,8 @@ analyzer:
   exclude: 
     - lib/generated/i18n.dart
     - lib/**.g.dart
+    - "**/*.freezed.dart"
+
   errors:
     prefer_conditional_assignment: error
     always_declare_return_types: error

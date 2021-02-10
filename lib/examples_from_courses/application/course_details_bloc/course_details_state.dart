@@ -1,39 +1,18 @@
-class CourseDetailsState {
-  final String name;
-  final double rating;
-  final double price;
-  final bool isBought;
-  final String description;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  CourseDetailsState({
-    this.name,
-    this.rating,
-    this.price,
-    this.isBought,
-    this.description,
-  });
+part 'course_details_state.freezed.dart';
 
-  CourseDetailsState.initial()
-      : this(
-          name: '',
-          rating: 0,
-          price: 0,
-          isBought: false,
-          description: '',
-        );
+@freezed
+abstract class CourseDetailsState with _$CourseDetailsState {
+  const factory CourseDetailsState({
+    @required String name,
+    @required double rating,
+    @required double price,
+    @required bool isBought,
+    @required String description,
+  }) = _CourseDetailsState;
+}
 
-  CourseDetailsState copyWith({
-    String name,
-    double rating,
-    double price,
-    bool isBought,
-    String description,
-  }) =>
-      CourseDetailsState(
-        name: name ?? this.name,
-        rating: rating ?? this.rating,
-        price: price ?? this.price,
-        isBought: isBought ?? this.isBought,
-        description: description ?? this.description,
-      );
+extension CourseDetailsDataDisplayMethods on CourseDetailsState {
+  String get boughtStatus => isBought ? 'Open' : 'Buy';
 }
