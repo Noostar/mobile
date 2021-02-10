@@ -23,14 +23,6 @@ class CourseDetailsBloc {
   }
 }
 
-///
-/// 1
-/// 2
-/// -- Subj
-/// 3
-/// 4
-/// ---- Subj
-
 // class CourseDetailsBloc extends Bloc<CourseDetailsEvent, CourseDetailsState> {
 //   CourseDetailsBloc() : super(CourseDetailsState.initial());
 

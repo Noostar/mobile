@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/examples_from_courses/presentation/widgets/app_bar_content.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetailsData {
@@ -22,44 +22,53 @@ extension CourseDetailsDataDisplayMethods on CourseDetailsData {
   String get boughtStatus => isBought ? 'Open' : 'Buy';
 }
 
-class CourseDetails extends StatelessWidget {
+class CourseDetails extends StatefulWidget {
   final CourseDetailsData inputData;
 
   const CourseDetails(this.inputData, {Key key}) : super(key: key);
 
   @override
+  _CourseDetailsState createState() => _CourseDetailsState();
+}
+
+class _CourseDetailsState extends State<CourseDetails> {
+  String test = 'Hello';
+  @override
   Widget build(BuildContext context) => Provider.value(
-        value: inputData,
+        value: widget.inputData,
         child: Scaffold(
           // appBar: AppBar(
           //   title: const NoostarAppBarContent(),
           // ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
-                const Text(
-                  'Course title',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w400,
+          body: Provider.value(
+            value: test,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Course title',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: const Color(0xffC4C4C4),
-                ),
-                const SizedBox(height: 8),
-                const Expanded(
-                  child: SingleChildScrollView(
-                    child: _CourseDescription(),
+                  const SizedBox(height: 24),
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    color: const Color(0xffC4C4C4),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  const Expanded(
+                    child: SingleChildScrollView(
+                      child: _CourseDescription(),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -129,4 +138,31 @@ class _BuyButtonState extends State<_BuyButton> {
       ),
     );
   }
+
+
+}
+
+class TestModel{
+  void test(){
+
+    final model = Model();
+
+    final result = model.makeRequest();
+
+    assert(result == true);
+  }
+}
+
+class Model {
+  final DataSource _dataSource;
+
+  Model(this._dataSource);
+
+  bool makeRequest(){
+    _dataSource.generateBool();
+  }
+}
+
+abstract class DataSource {
+  bool generateBool();
 }
