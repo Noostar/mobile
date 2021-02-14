@@ -22,14 +22,17 @@
 
 # Flutter/Dart/Pub related
 **/doc/api/
+**/doc/api/
 **/ios/Flutter/.last_build_id
+**/ios/Flutter/.last_build_id
+**/*.freezed.dart
+**/*.g.dart
+.dart_tool/
 .dart_tool/
 .flutter-plugins
+.flutter-plugins
 .flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-/build/
+.flutter-plugins-dependencies
 
 # Web related
 lib/generated_plugin_registrant.dart

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/examples_from_courses/presentation/pages/recovery_password/recovery_event.dart';
 import 'bloc.dart';
 
 class RecoveryPassword extends StatefulWidget {
@@ -9,39 +10,36 @@ class RecoveryPassword extends StatefulWidget {
 }
 
 class _RecoveryPasswordState extends State<RecoveryPassword> {
-  final _block = RecoveryPasswordBloc();
+  final _block = RecoveryPasswordBloc.initial();
 
   @override
   void initState() {
     super.initState();
 
-    _block.stateStream.listen(
-      (value) {
-        if (value.isSumbitted) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              actions: [
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'Ok');
-                  },
-                  child: const Text('Ok'),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'Cancel');
-                  },
-                  child: const Text('Cancel'),
-                )
-              ],
-              content: Text('You typed: ${value.email}'),
+    _block.listen((value) {if (value.isSumbitted == true) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          actions: [
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context, 'Ok');
+              },
+              child: const Text('Ok'),
             ),
-          ).then(print);
-          _block.add(isSumbitted: false);
-        }
-      },
-    );
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context, 'Cancel');
+              },
+              child: const Text('Cancel'),
+            )
+          ],
+          content: Text('You typed: ${_block.state.email}'),
+        ),
+      ).then(print);
+      _block.add(const RecoveryEvent.reset());
+    }});
+    
   }
 
   @override
@@ -86,7 +84,7 @@ recovery:''',
                       fillColor: Color(0xffC4C4C4),
                     ),
                     onChanged: (val) {
-                      _block.add(email: val);
+                      _block.add(RecoveryEvent.add(email: val));
                     },
                   ),
                   const SizedBox(height: 60),
@@ -95,7 +93,7 @@ recovery:''',
                     child: RaisedButton(
                       color: const Color(0xff565DFF),
                       onPressed: () {
-                        _block.add(isSumbitted: true);
+                        _block.add(const RecoveryEvent.submit());
                       },
                       child: const Padding(
                         padding: EdgeInsets.fromLTRB(21, 9, 21, 9),
@@ -115,7 +113,7 @@ recovery:''',
 
   @override
   void dispose() {
-    _block.dispose();
+    _block.close();
     super.dispose();
   }
 }
