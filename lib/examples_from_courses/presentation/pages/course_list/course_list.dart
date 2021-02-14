@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
 
 class CourseListPage extends StatelessWidget {
   const CourseListPage({Key key}) : super(key: key);
@@ -45,22 +47,53 @@ class _CourseList extends StatelessWidget {
   const _CourseList({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => GridView.count(
-        primary: false,
-        crossAxisSpacing: 21,
-        mainAxisSpacing: 22,
-        crossAxisCount: 2,
-        padding: const EdgeInsets.only(
-          bottom: 75,
-        ),
-        children: List.generate(
-          6,
-          (index) => _CourseListItem(
-            title: 'Course $index',
-            progress: Percent(100),
+  Widget build(BuildContext context) {
+    final _bloc = CourseListBloc();
+
+    return StreamBuilder(
+      stream: _bloc.stateStream,
+      builder: (context, snapshot) {
+        var itemCount = 0;
+        if (snapshot.data != null) {
+          if (snapshot.data.hasMore) {
+            itemCount = snapshot.data.courseItems.length + 1;
+          } else {
+            itemCount = snapshot.data.courseItems.length;
+          }
+        }
+
+        return GridView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= snapshot.data.courseItems.length) {
+              if (!snapshot.data.isLoading) {
+                _bloc.addEvent(GetMoreData());
+              }
+              return const Center(
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return _CourseListItem(
+              title: snapshot.data.courseItems[index],
+              progress: Percent(100),
+            );
+          },
+          itemCount: itemCount,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 21,
+            mainAxisSpacing: 22,
           ),
-        ),
-      );
+          padding: const EdgeInsets.only(
+            bottom: 75,
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _CourseListItem extends StatelessWidget {
