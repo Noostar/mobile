@@ -6,10 +6,6 @@ class RecoveryPasswordBloc extends Bloc<RecoveryEvent, RecoveryPasswordState> {
   RecoveryPasswordBloc(RecoveryPasswordState inputData)
       : super(RecoveryPasswordState(
             email: inputData.email, isSumbitted: inputData.isSumbitted));
-
-  RecoveryPasswordBloc.initial()
-      : super(const RecoveryPasswordState(email: '', isSumbitted: false));
-
   @override
   Stream<RecoveryPasswordState> mapEventToState(RecoveryEvent event) async* {
     yield* event.map(add: (e) async* {
