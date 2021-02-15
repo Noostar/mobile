@@ -1,3 +1,12 @@
-abstract class CourseListEvent {}
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class GetMoreData extends CourseListEvent {}
+part 'course_list_events.freezed.dart';
+
+@freezed
+abstract class CourseListEvent with _$CourseListEvent {
+  const factory CourseListEvent.loadMore() = _Load;
+}
+
+// abstract class CourseListEvent {}
+
+// class GetMoreData extends CourseListEvent {}

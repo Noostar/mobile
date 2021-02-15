@@ -1,42 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_state.dart';
+import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart';
+import 'package:provider/provider.dart';
+
+class CourseListData {
+  List<String> courseItems;
+  bool isLoading;
+  bool hasMore;
+
+  CourseListData({
+    @required this.courseItems,
+    @required this.isLoading,
+    @required this.hasMore,
+  });
+}
 
 class CourseListPage extends StatelessWidget {
-  const CourseListPage({Key key}) : super(key: key);
+  final CourseListData inputData;
+
+  const CourseListPage(this.inputData, {Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => Provider.value(
+        value: inputData,
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Active Courses'),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 14),
-                const Text(
-                  'Active courses',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w400,
+          body: BlocProvider<CourseListBloc>(
+            create: (context) => CourseListBloc(inputData),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 14),
+                  const Text(
+                    'Active courses',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  children: const [
-                    Text('Recommended couses'),
-                    SizedBox(width: 31),
-                    Text('Available couses'),
-                  ],
-                ),
-                const SizedBox(height: 21),
-                const Expanded(
-                  child: _CourseList(),
-                ),
-              ],
+                  const SizedBox(height: 14),
+                  Row(
+                    children: const [
+                      Text('Recommended couses'),
+                      SizedBox(width: 31),
+                      Text('Available couses'),
+                    ],
+                  ),
+                  const SizedBox(height: 21),
+                  const Expanded(
+                    child: _CourseList(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -48,25 +69,24 @@ class _CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _bloc = CourseListBloc();
-
-    return StreamBuilder(
-      stream: _bloc.stateStream,
-      builder: (context, snapshot) {
+    return BlocBuilder<CourseListBloc, CourseListState>(
+      builder: (context, state) {
         var itemCount = 0;
-        if (snapshot.data != null) {
-          if (snapshot.data.hasMore) {
-            itemCount = snapshot.data.courseItems.length + 1;
+        if (state != null) {
+          if (state.hasMore) {
+            itemCount = state.courseItems.length + 1;
           } else {
-            itemCount = snapshot.data.courseItems.length;
+            itemCount = state.courseItems.length;
           }
         }
 
         return GridView.builder(
           itemBuilder: (BuildContext context, int index) {
-            if (index >= snapshot.data.courseItems.length) {
-              if (!snapshot.data.isLoading) {
-                _bloc.addEvent(GetMoreData());
+            if (index >= state.courseItems.length) {
+              if (!state.isLoading) {
+                context
+                    .read<CourseListBloc>()
+                    .add(const CourseListEvent.loadMore());
               }
               return const Center(
                 child: SizedBox(
@@ -77,7 +97,7 @@ class _CourseList extends StatelessWidget {
               );
             }
             return _CourseListItem(
-              title: snapshot.data.courseItems[index],
+              title: state.courseItems[index],
               progress: Percent(100),
             );
           },
