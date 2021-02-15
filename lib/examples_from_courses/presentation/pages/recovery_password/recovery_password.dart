@@ -16,29 +16,7 @@ class RecoveryPassword extends StatelessWidget {
             builder: (context) =>
                 BlocListener<RecoveryPasswordBloc, RecoveryPasswordState>(
               listener: (context, state) {
-                if (state.isSumbitted == true) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      actions: [
-                        RaisedButton(
-                          onPressed: () {
-                            Navigator.pop(context, 'Ok');
-                          },
-                          child: const Text('Ok'),
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            Navigator.pop(context, 'Cancel');
-                          },
-                          child: const Text('Cancel'),
-                        )
-                      ],
-                      content: Text('You typed: ${state.email}'),
-                    ),
-                  ).then(print);
-                  _block.add(const RecoveryEvent.reset());
-                }
+                showConfirmationDialog(context, state);
               },
               child: Container(
                 child: SafeArea(
@@ -93,7 +71,8 @@ recovery:''',
                               _block.add(const RecoveryEvent.submit());
                             },
                             child: const Padding(
-                              padding: EdgeInsets.fromLTRB(21, 9, 21, 9),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 21, vertical: 9),
                               child: Text(
                                 'Submit',
                                 style: TextStyle(
@@ -111,4 +90,31 @@ recovery:''',
           ),
         ),
       );
+  void showConfirmationDialog(
+      BuildContext context, RecoveryPasswordState state) async {
+    if (state.isSumbitted == true) {
+      var data = await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          actions: [
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context, 'Ok');
+              },
+              child: const Text('Ok'),
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context, 'Cancel');
+              },
+              child: const Text('Cancel'),
+            )
+          ],
+          content: Text('You typed: ${state.email}'),
+        ),
+      );
+      print(data);
+      _block.add(const RecoveryEvent.reset());
+    }
+  }
 }
