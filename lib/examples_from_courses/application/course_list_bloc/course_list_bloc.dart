@@ -16,7 +16,7 @@ class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
 
   final _finalCount = 60;
   final _itemsPerPage = 20;
-  final int _currentPage = 0;
+  int _currentPage = 0;
 
   @override
   Stream<CourseListState> mapEventToState(CourseListEvent event) async* {
@@ -26,10 +26,10 @@ class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
         await Future.delayed(const Duration(seconds: 3));
         final newItems = [...state.courseItems, ..._newCourseItems()];
 
-        if (newItems.length == _finalCount) {
-          yield state.copyWith(hasMore: false);
-        }
-        yield state.copyWith(isLoading: false, courseItems: newItems);
+        final hasMore = newItems.length < _finalCount;
+        yield state.copyWith(
+            isLoading: false, hasMore: hasMore, courseItems: newItems);
+        _currentPage++;
       },
     );
   }

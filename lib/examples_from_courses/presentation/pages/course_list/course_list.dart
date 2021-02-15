@@ -68,52 +68,51 @@ class _CourseList extends StatelessWidget {
   const _CourseList({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CourseListBloc, CourseListState>(
-      builder: (context, state) {
-        var itemCount = 0;
-        if (state != null) {
-          if (state.hasMore) {
-            itemCount = state.courseItems.length + 1;
-          } else {
-            itemCount = state.courseItems.length;
-          }
-        }
-
-        return GridView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            if (index >= state.courseItems.length) {
-              if (!state.isLoading) {
-                context
-                    .read<CourseListBloc>()
-                    .add(const CourseListEvent.loadMore());
-              }
-              return const Center(
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(),
-                ),
-              );
+  Widget build(BuildContext context) =>
+      BlocBuilder<CourseListBloc, CourseListState>(
+        builder: (context, state) {
+          var itemCount = 0;
+          if (state != null) {
+            if (state.hasMore) {
+              itemCount = state.courseItems.length + 1;
+            } else {
+              itemCount = state.courseItems.length;
             }
-            return _CourseListItem(
-              title: state.courseItems[index],
-              progress: Percent(100),
-            );
-          },
-          itemCount: itemCount,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 21,
-            mainAxisSpacing: 22,
-          ),
-          padding: const EdgeInsets.only(
-            bottom: 75,
-          ),
-        );
-      },
-    );
-  }
+          }
+
+          return GridView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              if (index >= state.courseItems.length) {
+                if (!state.isLoading) {
+                  context
+                      .read<CourseListBloc>()
+                      .add(const CourseListEvent.loadMore());
+                }
+                return const Center(
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              return _CourseListItem(
+                title: state.courseItems[index],
+                progress: Percent(100),
+              );
+            },
+            itemCount: itemCount,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 21,
+              mainAxisSpacing: 22,
+            ),
+            padding: const EdgeInsets.only(
+              bottom: 75,
+            ),
+          );
+        },
+      );
 }
 
 class _CourseListItem extends StatelessWidget {

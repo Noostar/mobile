@@ -6,7 +6,3 @@ part 'course_list_events.freezed.dart';
 abstract class CourseListEvent with _$CourseListEvent {
   const factory CourseListEvent.loadMore() = _Load;
 }
-
-// abstract class CourseListEvent {}
-
-// class GetMoreData extends CourseListEvent {}
