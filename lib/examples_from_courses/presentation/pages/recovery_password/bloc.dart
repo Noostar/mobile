@@ -5,7 +5,7 @@ import 'package:mobile/examples_from_courses/presentation/pages/recovery_passwor
 class RecoveryPasswordBloc extends Bloc<RecoveryEvent, RecoveryPasswordState> {
   RecoveryPasswordBloc(RecoveryPasswordState inputData)
       : super(RecoveryPasswordState(
-            email: inputData.email, isSumbitted: inputData.isSumbitted));
+            email: inputData.email, isSubmitted: inputData.isSubmitted));
   @override
   Stream<RecoveryPasswordState> mapEventToState(RecoveryEvent event) async* {
     yield* event.map(add: (e) async* {
@@ -13,10 +13,10 @@ class RecoveryPasswordBloc extends Bloc<RecoveryEvent, RecoveryPasswordState> {
       yield state.copyWith(email: e.email);
     }, reset: (_) async* {
       print('Form has been reseted');
-      yield state.copyWith(isSumbitted: false);
+      yield state.copyWith(isSubmitted: false);
     }, submit: (_) async* {
       print('Form submitted');
-      yield state.copyWith(isSumbitted: true);
+      yield state.copyWith(isSubmitted: true);
     });
   }
 }

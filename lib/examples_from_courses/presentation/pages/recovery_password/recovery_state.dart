@@ -6,9 +6,9 @@ part 'recovery_state.freezed.dart';
 abstract class RecoveryPasswordState with _$RecoveryPasswordState {
   const factory RecoveryPasswordState(
       {@required String email,
-      @required bool isSumbitted}) = _RecoveryPasswordState;
+      @required bool isSubmitted}) = _RecoveryPasswordState;
 }
 
 extension RecoveryEmailOnSubmit on RecoveryPasswordState {
-  String get submitStatus => isSumbitted ? '' : email;
+  String get submitStatus => isSubmitted ? '' : email;
 }

@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/presentation/pages/recovery_password/recovery_event.dart';
 import 'package:mobile/examples_from_courses/presentation/pages/recovery_password/recovery_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'bloc.dart';
 
 class RecoveryPassword extends StatelessWidget {
-  final _block = RecoveryPasswordBloc(
-      const RecoveryPasswordState(email: '', isSumbitted: false));
-
   @override
   Widget build(BuildContext context) => BlocProvider<RecoveryPasswordBloc>(
-        create: (context) => _block,
+        create: (context) => RecoveryPasswordBloc(
+            const RecoveryPasswordState(email: '', isSubmitted: false)),
         child: Scaffold(
           body: Builder(
             builder: (context) =>
                 BlocListener<RecoveryPasswordBloc, RecoveryPasswordState>(
               listener: (context, state) {
-                showConfirmationDialog(context, state);
+                showConfirmationDialog(context, state.isSubmitted, state.email);
               },
               child: Container(
                 child: SafeArea(
@@ -59,7 +58,9 @@ recovery:''',
                             fillColor: Color(0xffC4C4C4),
                           ),
                           onChanged: (val) {
-                            _block.add(RecoveryEvent.add(email: val));
+                            context
+                                .read<RecoveryPasswordBloc>()
+                                .add(RecoveryEvent.add(email: val));
                           },
                         ),
                         const SizedBox(height: 60),
@@ -68,7 +69,9 @@ recovery:''',
                           child: RaisedButton(
                             color: const Color(0xff565DFF),
                             onPressed: () {
-                              _block.add(const RecoveryEvent.submit());
+                              context
+                                  .read<RecoveryPasswordBloc>()
+                                  .add(const RecoveryEvent.submit());
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
@@ -91,9 +94,9 @@ recovery:''',
         ),
       );
   void showConfirmationDialog(
-      BuildContext context, RecoveryPasswordState state) async {
-    if (state.isSumbitted == true) {
-      var data = await showDialog(
+      BuildContext context, bool isSubmitted, String email) async {
+    if (isSubmitted == true) {
+      final data = await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           actions: [
@@ -110,11 +113,11 @@ recovery:''',
               child: const Text('Cancel'),
             )
           ],
-          content: Text('You typed: ${state.email}'),
+          content: Text('You typed: ${email}'),
         ),
       );
       print(data);
-      _block.add(const RecoveryEvent.reset());
+      context.read<RecoveryPasswordBloc>().add(const RecoveryEvent.reset());
     }
   }
 }
