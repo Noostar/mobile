@@ -3,9 +3,8 @@ import 'package:mobile/examples_from_courses/presentation/pages/recovery_passwor
 import 'package:mobile/examples_from_courses/presentation/pages/recovery_password/recovery_state.dart';
 
 class RecoveryPasswordBloc extends Bloc<RecoveryEvent, RecoveryPasswordState> {
-  RecoveryPasswordBloc(RecoveryPasswordState inputData)
-      : super(RecoveryPasswordState(
-            email: inputData.email, isSubmitted: inputData.isSubmitted));
+  RecoveryPasswordBloc() : super(RecoveryPasswordState.initial());
+
   @override
   Stream<RecoveryPasswordState> mapEventToState(RecoveryEvent event) async* {
     yield* event.map(add: (e) async* {

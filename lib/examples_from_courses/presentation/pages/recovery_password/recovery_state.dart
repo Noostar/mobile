@@ -7,6 +7,9 @@ abstract class RecoveryPasswordState with _$RecoveryPasswordState {
   const factory RecoveryPasswordState(
       {@required String email,
       @required bool isSubmitted}) = _RecoveryPasswordState;
+
+  factory RecoveryPasswordState.initial() =>
+      const RecoveryPasswordState(email: '', isSubmitted: false);
 }
 
 extension RecoveryEmailOnSubmit on RecoveryPasswordState {
