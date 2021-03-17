@@ -1,46 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
+import 'package:flutter/services.dart';
 
 class CourseListPage extends StatelessWidget {
   const CourseListPage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Active Courses'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 14),
-                const Text(
-                  'Active courses',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w400,
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFF1F0F6),
+    ));
+    return Container(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(85.0),
+          child: AppBar(
+            brightness: Brightness.light,
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 35,
+                    height: 35,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/avatar.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  children: const [
-                    Text('Recommended couses'),
-                    SizedBox(width: 31),
-                    Text('Available couses'),
-                  ],
-                ),
-                const SizedBox(height: 21),
-                const Expanded(
-                  child: _CourseList(),
-                ),
-              ],
+                  const SizedBox(
+                    width: 13,
+                  ),
+                  const Text(
+                    'Katherine',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF0A063C),
+                    ),
+                  )
+                ],
+              ),
             ),
+            backgroundColor: const Color(0xFFF1F0F6),
+            elevation: 0,
           ),
         ),
-      );
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 14),
+              const Text(
+                'Courses',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0A063C),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: const [
+                  Text(
+                    'Active',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFFF5215)),
+                  ),
+                  SizedBox(width: 31),
+                  Text('Recommended'),
+                  SizedBox(width: 31),
+                  Text('Available'),
+                ],
+              ),
+              const SizedBox(height: 21),
+              const Expanded(
+                child: _CourseList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _CourseList extends StatelessWidget {
@@ -62,7 +110,7 @@ class _CourseList extends StatelessWidget {
           }
         }
 
-        return GridView.builder(
+        return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data.courseItems.length) {
               if (!snapshot.data.isLoading) {
@@ -72,7 +120,10 @@ class _CourseList extends StatelessWidget {
                 child: SizedBox(
                   height: 24,
                   width: 24,
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Color(0xFFFF5215)),
+                  ),
                 ),
               );
             }
@@ -82,11 +133,6 @@ class _CourseList extends StatelessWidget {
             );
           },
           itemCount: itemCount,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 21,
-            mainAxisSpacing: 22,
-          ),
           padding: const EdgeInsets.only(
             bottom: 75,
           ),
@@ -103,36 +149,59 @@ class _CourseListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomStart,
-          children: <Widget>[
-            Container(
-              color: const Color(0xFFC4C4C4),
-              alignment: Alignment.bottomLeft,
-              padding: const EdgeInsets.only(
-                bottom: 15,
-                left: 6,
-              ),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFFFFFFFF),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 20.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Stack(
+              alignment: AlignmentDirectional.bottomStart,
+              children: <Widget>[
+                Container(
+                  height: 224,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/course_image.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
+                Container(
+                  height: 224,
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: FractionalOffset.center,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                        Color(0x00000000),
+                        Color(0xD5000000),
+                      ])),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 15, bottom: 30),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFFFFFFF),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 14,
+                  width: double.infinity,
+                  color: const Color(0xFF239621),
+                  child: Text(progress.getPercent(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      )),
+                ),
+              ],
             ),
-            Container(
-              height: 11,
-              width: double.infinity,
-              color: const Color(0xFF81c54b),
-              child: Text(
-                progress.getPercent(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 10),
-              ),
-            ),
-          ],
+          ),
         ),
       );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/examples_from_courses/presentation/pages/course_details/course_detaills.dart';
+import 'package:mobile/examples_from_courses/presentation/pages/course_list/course_list.dart';
 
 class ExampleApp extends StatelessWidget {
   @override
@@ -7,15 +7,9 @@ class ExampleApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          fontFamily: 'Montserrat',
+          scaffoldBackgroundColor: const Color(0xFFF1F0F6),
         ),
-        home: CourseDetails(
-          CourseDetailsData(
-            description: 'Desc',
-            isBought: false,
-            name: 'Course 1',
-            price: 12.23,
-            rating: 4.83,
-          ),
-        ),
+        home: CourseListPage(),
       );
 }
