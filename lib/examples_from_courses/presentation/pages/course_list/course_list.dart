@@ -8,17 +8,20 @@ class CourseListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color(0xFFF1F0F6),
     ));
-    return Container(
+    return DefaultTabController(
+      length: 3,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(85.0),
+          preferredSize: const Size.fromHeight(85.0),
           child: AppBar(
+            titleSpacing: 0, // remove default spacing
             brightness: Brightness.light,
+            backgroundColor: const Color(0xFFF1F0F6),
             title: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: Row(
                 children: [
                   Container(
@@ -45,16 +48,14 @@ class CourseListPage extends StatelessWidget {
                 ],
               ),
             ),
-            backgroundColor: const Color(0xFFF1F0F6),
             elevation: 0,
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 14),
               const Text(
                 'Courses',
                 style: TextStyle(
@@ -64,24 +65,53 @@ class CourseListPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              Row(
-                children: const [
-                  Text(
-                    'Active',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFFFF5215)),
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: const Color(0xFFD7D6E4),
+                    margin: const EdgeInsets.only(bottom: 2),
                   ),
-                  SizedBox(width: 31),
-                  Text('Recommended'),
-                  SizedBox(width: 31),
-                  Text('Available'),
+                  const TabBar(
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorWeight: 5,
+                    indicatorColor: Color(0xFFFF5215),
+                    unselectedLabelColor: Color(0xFF8886A9),
+                    unselectedLabelStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    labelColor: Color(0xFFFF5215),
+                    labelStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    tabs: [
+                      Tab(
+                        text: 'Active',
+                      ),
+                      Tab(
+                        text: 'Recommended',
+                      ),
+                      Tab(
+                        text: 'Available',
+                      ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 21),
               const Expanded(
-                child: _CourseList(),
+                child: TabBarView(children: [
+                  _CourseList(),
+                  _CourseList(),
+                  _CourseList(),
+                ]),
               ),
             ],
           ),
@@ -117,12 +147,17 @@ class _CourseList extends StatelessWidget {
                 _bloc.addEvent(GetMoreData());
               }
               return const Center(
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Color(0xFFFF5215)),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 20,
+                  ),
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFFFF5215)),
+                    ),
                   ),
                 ),
               );
@@ -177,14 +212,33 @@ class _CourseListItem extends StatelessWidget {
                       ])),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 15, bottom: 30),
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFFFFFFFF),
-                    ),
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    bottom: 30,
+                    right: 15,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFFFFFFF),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Container(
+                        width: 11,
+                        height: 11,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF5215),
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
