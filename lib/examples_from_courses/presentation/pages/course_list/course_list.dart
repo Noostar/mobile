@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
@@ -17,7 +19,7 @@ class CourseListPage extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(85.0),
           child: AppBar(
-            titleSpacing: 0, // remove default spacing
+            titleSpacing: 0,
             brightness: Brightness.light,
             backgroundColor: const Color(0xFFF1F0F6),
             title: Padding(
@@ -80,11 +82,6 @@ class CourseListPage extends StatelessWidget {
                     indicatorWeight: 5,
                     indicatorColor: Color(0xFFFF5215),
                     unselectedLabelColor: Color(0xFF8886A9),
-                    unselectedLabelStyle: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
                     labelColor: Color(0xFFFF5215),
                     labelStyle: TextStyle(
                       fontFamily: 'Montserrat',
@@ -164,7 +161,7 @@ class _CourseList extends StatelessWidget {
             }
             return _CourseListItem(
               title: snapshot.data.courseItems[index],
-              progress: Percent(100),
+              progress: Percent(75),
             );
           },
           itemCount: itemCount,
@@ -241,17 +238,56 @@ class _CourseListItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  height: 14,
-                  width: double.infinity,
-                  color: const Color(0xFF239621),
-                  child: Text(progress.getPercent(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      )),
+                Stack(
+                  children: [
+                    Container(
+                      height: 14,
+                      width: double.infinity,
+                      color: Color(0x59626262),
+                    ),
+                    Container(
+                      height: 14,
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: FractionallySizedBox(
+                        widthFactor: progress.getValue() * 0.01,
+                        child: Container(
+                          width: 140,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            borderRadius: (progress.getValue() != 100)
+                                ? const BorderRadius.only(
+                                    topRight: Radius.circular(50),
+                                    bottomRight: Radius.circular(50),
+                                  )
+                                : null,
+                            color: (() {
+                              if (progress.getValue() <= 33)
+                                return const Color(0xFFF2C94C);
+                              else if (progress.getValue() > 33 &&
+                                  progress.getValue() <= 66)
+                                return const Color(0xFFB1D64B);
+                              else if (progress.getValue() > 66)
+                                return const Color(0xFF239621);
+                            })(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 14,
+                      width: double.infinity,
+                      child: Text(
+                        progress.getPercent(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -266,4 +302,5 @@ class Percent {
 
   String getPercent() =>
       value == value.round() ? '${value.round()}%' : '${value}%';
+  double getValue() => value;
 }
