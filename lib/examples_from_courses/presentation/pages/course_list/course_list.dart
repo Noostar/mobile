@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
 import 'package:mobile/examples_from_courses/application/course_list_bloc/course_list_events.dart';
@@ -243,7 +241,7 @@ class _CourseListItem extends StatelessWidget {
                     Container(
                       height: 14,
                       width: double.infinity,
-                      color: Color(0x59626262),
+                      color: const Color(0x59626262),
                     ),
                     Container(
                       height: 14,
