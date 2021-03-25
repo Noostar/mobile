@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 
-class CoursePage extends StatelessWidget {
-  const CoursePage({Key key}) : super(key: key);
+class CoursePage extends StatefulWidget {
+  CoursePage({Key key}) : super(key: key);
+
+  @override
+  _CoursePageState createState() => _CoursePageState();
+}
+
+class _CoursePageState extends State<CoursePage> {
+  ScrollController _scrollController;
+  double lastPixels = 0.0;
+  bool scrolled = false;
 
   @override
   Widget build(BuildContext context) {
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      setState(() {
+        final scrolledValue = _scrollController.position.pixels;
+        if (scrolledValue - lastPixels > 0)
+          scrolled = true;
+        else
+          scrolled = false;
+      });
+    });
     return Scaffold(
         body: Stack(
       children: [
@@ -13,15 +32,19 @@ class CoursePage extends StatelessWidget {
             image: AssetImage('assets/course_image.png'),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 240),
-          padding: const EdgeInsets.fromLTRB(20, 29, 20, 120),
-          alignment: Alignment.bottomCenter,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: SingleChildScrollView(
+        SingleChildScrollView(
+          controller: _scrollController,
+          child: AnimatedContainer(
+            margin: scrolled
+                ? const EdgeInsets.only(top: 0)
+                : const EdgeInsets.only(top: 240),
+            padding: const EdgeInsets.fromLTRB(20, 29, 20, 120),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            duration: const Duration(milliseconds: 200),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
