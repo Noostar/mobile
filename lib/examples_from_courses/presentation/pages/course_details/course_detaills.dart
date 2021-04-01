@@ -47,12 +47,9 @@ class _CourseDetailsState extends State<CourseDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     'Course title',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                   const SizedBox(height: 24),
                   Container(
@@ -91,12 +88,8 @@ class _CourseDescription extends StatelessWidget {
                 builder: (context, state) => GestureDetector(
                   onTap: () {
                     state.isBought
-                        ? context
-                            .read<CourseDetailsBloc>()
-                            .add(const CourseDetailsEvent.open())
-                        : context
-                            .read<CourseDetailsBloc>()
-                            .add(const CourseDetailsEvent.buy());
+                        ? context.read<CourseDetailsBloc>().add(const CourseDetailsEvent.open())
+                        : context.read<CourseDetailsBloc>().add(const CourseDetailsEvent.buy());
                   },
                   child: Container(
                     width: 125,

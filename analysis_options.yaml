@@ -41,7 +41,6 @@ linter:
     - flutter_style_todos
     - join_return_with_assignment
     - library_prefixes
-    - lines_longer_than_80_chars
     - non_constant_identifier_names
     - null_closures
     - omit_local_variable_types

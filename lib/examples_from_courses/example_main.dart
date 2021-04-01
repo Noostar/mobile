@@ -8,3 +8,5 @@ void main() {
   Bloc.observer = NoostarBlocObserver();
   runApp(ExampleApp());
 }
+
+
