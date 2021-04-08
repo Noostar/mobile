@@ -1,19 +1,21 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
+/// Key points:
+/// 1. Animation classes like Animation, AnimationController and Tween have essentially just one purpose - generate values which can be used in the build method.
+/// 2. AnimationController. It takes in a Duration and generates doubles with values between 0 (beginning) and 1 (end) in the specified time span.
+/// 3. There's one additional step though - you have to tell this controller how many times per second it should progress toward the final value. For this, use a special ticker mixin on the widget containing the AnimationController. Depending on the device screen FPS, this ticker will "tick" 60 or maybe even 90 times per second. A new value will be generated on every tick.
 
 class DvdMagicScreen extends StatelessWidget {
   const DvdMagicScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: Colors.black,
-          child: const AnimationDVD(),
+  Widget build(BuildContext context) => const Scaffold(
+        body: SafeArea(
+          child: Center(child: AnimationDVD()),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class AnimationDVD extends StatefulWidget {
@@ -23,84 +25,76 @@ class AnimationDVD extends StatefulWidget {
   _AnimationDvdState createState() => _AnimationDvdState();
 }
 
-class _AnimationDvdState extends State<AnimationDVD> {
-  double top = 0;
-  double left = 0;
-  double right = 0;
+class _AnimationDvdState extends State<AnimationDVD> with SingleTickerProviderStateMixin {
+  Animation<double> animationInPercent;
+  Animation<Color> colorAnimation;
+  AnimationController animController;
 
   @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+  void initState() {
+    super.initState();
+    animController = AnimationController(
+      duration: const Duration(seconds: 5),
+      // This takes in the TickerProvider, which is this _AnimationPageState object
+      vsync: this,
+    );
 
-    print('On tap. Prev screenWidth = $screenWidth, next screenHeight = $screenHeight');
+    // final curvedAnimation = CurvedAnimation(
+    //   parent: animController,
+    //   curve: Curves.bounceIn,
+    //   reverseCurve: Curves.easeOut,
+    // );
 
-    return SizedBox(
-      width: screenWidth,
-      height: screenHeight,
-      child: Stack(
-        children: [
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            top: top,
-            left: left,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => setState(() => _moveDVD(context)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'DVD',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'video',
-                    style: TextStyle(fontSize: 16, color: Colors.red),
-                  ),
-                ],
-              ),
+    // animation = Tween<double>(
+    //   begin: 0,
+    //   end: 2 * math.pi,
+    // ).animate(curvedAnimation)
+    animationInPercent = Tween<double>(
+      begin: 0,
+      end: 1,
+    ) // Chaining multiple Tweens will execute their "animation value modifications" sequentially
+        .chain(CurveTween(curve: Curves.bounceIn))
+        // Pass in the AnimationController directly again
+        .animate(animController)
+          ..addListener(() {
+            // Empty setState because the updated value is already in the animation field
+            setState(() {});
+          })
+          ..addStatusListener((status) {
+            print('Status of the animation: ${status}');
+            if (status == AnimationStatus.completed) {
+              animController.reverse();
+            } else if (status == AnimationStatus.dismissed) {
+              animController.forward();
+            }
+          });
+
+    // Goes from 0 to 1, we'll do something with these values later on
+    animController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) => Transform.rotate(
+        angle: animationInPercent.value * math.pi * 2,
+        child: Container(
+          width: 200 * animationInPercent.value,
+          height: 200 * animationInPercent.value,
+          color: Colors.red.withOpacity(0.3),
+          alignment: Alignment.center,
+          child: Text(
+            'Hello',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
           ),
-          Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: MaterialButton(
-              color: Colors.yellow.withOpacity(0.3),
-              onPressed: () => setState(resetValues),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+        ),
+      );
 
-  void _moveDVD(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final newTop = top + 50;
-    final newLeft = left + 50;
-
-    print('On tap. Prev top = $top, next top = $newTop');
-    print('On tap. Prev left = $left, next left = $newLeft');
-
-    if (newTop < (screenHeight - 50)) {
-      top = newTop;
-    }
-    if (newLeft < (screenWidth - 50)) {
-      left = newLeft;
-    }
-  }
-
-  void resetValues() {
-    left = 0;
-    top = 0;
+  @override
+  void dispose() {
+    animController.dispose();
+    super.dispose();
   }
 }
