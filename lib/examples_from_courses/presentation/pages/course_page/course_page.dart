@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MaterialApp(
+    home: CoursePage(),
+  ));
+}
+
 class CoursePage extends StatefulWidget {
   CoursePage({Key key}) : super(key: key);
 
@@ -8,155 +14,156 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  ScrollController _scrollController;
-  double lastPixels = 0.0;
-  bool scrolled = false;
+  bool _pinned = false;
+  bool _snap = false;
+  bool _floating = true;
 
   @override
   Widget build(BuildContext context) {
-    _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      setState(() {
-        final scrolledValue = _scrollController.position.pixels;
-        if (scrolledValue - lastPixels > 0)
-          scrolled = true;
-        else
-          scrolled = false;
-      });
-    });
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          child: const Image(
-            image: AssetImage('assets/course_image.png'),
-          ),
-        ),
-        SingleChildScrollView(
-          controller: _scrollController,
-          child: AnimatedContainer(
-            margin: scrolled
-                ? const EdgeInsets.only(top: 0)
-                : const EdgeInsets.only(top: 240),
-            padding: const EdgeInsets.fromLTRB(20, 29, 20, 120),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            duration: const Duration(milliseconds: 200),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Python Crash Course',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Montserrat',
-                          color: Color(0xff0A063C)),
-                    ),
-                    const Text(
-                      '10\$',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xffFF5215)),
-                    ),
-                  ],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+              backgroundColor: Colors.white,
+              pinned: _pinned,
+              snap: _snap,
+              floating: _floating,
+              expandedHeight: 200.0,
+              flexibleSpace: const FlexibleSpaceBar(
+                background: Image(
+                  image: AssetImage('assets/course_image.jpg'),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      '4.9',
-                      style: TextStyle(
-                          color: Color(0xff8886A9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Montserrat'),
+              )),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) => Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 29, 20, 120),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    const SizedBox(width: 5),
-                    const Image(
-                      image: AssetImage('assets/star.png'),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Duration:',
-                      style: TextStyle(
-                          color: Color(0xff0A063C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    const Text(
-                      '10 hrs',
-                      style: TextStyle(
-                          color: Color(0xff8886A9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Montserrat'),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Authors:',
-                      style: TextStyle(
-                          color: Color(0xff0A063C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    const Text(
-                      'Ivanov I.I., Petrov P.P.',
-                      style: TextStyle(
-                          color: Color(0xff8886A9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Montserrat'),
-                    ),
-                  ],
-                ),
-                const CoursePageInfoBlock(
-                    firstBlockText: 'Description:', secondBlockText: '''
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Python Crash Course',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xff0A063C)),
+                            ),
+                            const Text(
+                              '10\$',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xffFF5215)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              '4.9',
+                              style: TextStyle(
+                                  color: Color(0xff8886A9),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                            const SizedBox(width: 5),
+                            const Image(
+                              image: AssetImage('assets/star.png'),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Duration:',
+                              style: TextStyle(
+                                  color: Color(0xff0A063C),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                            const Text(
+                              '10 hrs',
+                              style: TextStyle(
+                                  color: Color(0xff8886A9),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Authors:',
+                              style: TextStyle(
+                                  color: Color(0xff0A063C),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                            const Text(
+                              'Ivanov I.I., Petrov P.P.',
+                              style: TextStyle(
+                                  color: Color(0xff8886A9),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                          ],
+                        ),
+                        const CoursePageInfoBlock(
+                            firstBlockText: 'Description:', secondBlockText: '''
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '''),
-                const CoursePageInfoBlock(
-                    firstBlockText: 'Start skills:', secondBlockText: '''
+                        const CoursePageInfoBlock(
+                            firstBlockText: 'Start skills:',
+                            secondBlockText: '''
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....'''),
-                const CoursePageInfoBlock(
-                    firstBlockText: 'Final skills:  ', secondBlockText: '''
+                        const CoursePageInfoBlock(
+                            firstBlockText: 'Final skills:  ',
+                            secondBlockText: '''
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....''')
-              ],
+                      ],
+                    ),
+                  ),
+                  const BuyButton(),
+                ],
+              ),
+              childCount: 1,
             ),
-          ),
-        ),
-        const BuyButton(),
-      ],
-    ));
+          )
+        ],
+      ),
+    );
   }
 }
 
