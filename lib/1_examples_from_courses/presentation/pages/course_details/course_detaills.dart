@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_bloc.dart';
-import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_state.dart';
-import 'package:mobile/examples_from_courses/application/course_details_bloc/course_details_events.dart';
+import 'package:mobile/1_examples_from_courses/application/course_details_bloc/course_details_bloc.dart';
+import 'package:mobile/1_examples_from_courses/application/course_details_bloc/course_details_events.dart';
+import 'package:mobile/1_examples_from_courses/application/course_details_bloc/course_details_state.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetailsData {
@@ -91,12 +91,8 @@ class _CourseDescription extends StatelessWidget {
                 builder: (context, state) => GestureDetector(
                   onTap: () {
                     state.isBought
-                        ? context
-                            .read<CourseDetailsBloc>()
-                            .add(const CourseDetailsEvent.open())
-                        : context
-                            .read<CourseDetailsBloc>()
-                            .add(const CourseDetailsEvent.buy());
+                        ? context.read<CourseDetailsBloc>().add(const CourseDetailsEvent.open())
+                        : context.read<CourseDetailsBloc>().add(const CourseDetailsEvent.buy());
                   },
                   child: Container(
                     width: 125,
@@ -121,7 +117,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Final skills:
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-''')
+'''),
         ],
       );
 }

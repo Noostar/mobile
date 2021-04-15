@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:mobile/examples_from_courses/presentation/pages/course_details/course_detaills.dart';
+import 'package:mobile/1_examples_from_courses/presentation/pages/course_details/course_detaills.dart';
 import 'course_details_events.dart';
 import 'course_details_state.dart';
 

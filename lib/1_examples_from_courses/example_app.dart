@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/examples_from_courses/presentation/pages/course_list/course_list.dart';
+import 'package:mobile/presentation/pages/course_list/course_list.dart';
 
 class ExampleApp extends StatelessWidget {
   @override
