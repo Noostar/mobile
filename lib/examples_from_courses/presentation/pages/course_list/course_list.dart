@@ -9,8 +9,11 @@ class CourseListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFFF1F0F6),
+      SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
     );
@@ -27,15 +30,11 @@ class CourseListPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const UserInfo(),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   'Courses',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0A063C),
-                  ),
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               const SizedBox(height: 14),
@@ -78,9 +77,9 @@ class _CourseList extends StatelessWidget {
               if (!snapshot.data.isLoading) {
                 _bloc.addEvent(GetMoreData());
               }
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 20,
                     bottom: 20,
                   ),
@@ -88,8 +87,9 @@ class _CourseList extends StatelessWidget {
                     height: 24,
                     width: 24,
                     child: CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Color(0xFFFF5215)),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).accentColor,
+                      ),
                     ),
                   ),
                 ),
@@ -153,11 +153,7 @@ class _CourseListItem extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFFFFFFFF),
-                        ),
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                       const SizedBox(
                         width: 8,
@@ -165,9 +161,10 @@ class _CourseListItem extends StatelessWidget {
                       Container(
                         width: 11,
                         height: 11,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFF5215),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).accentColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                         ),
                       ),
                     ],
@@ -209,13 +206,10 @@ class UserInfo extends StatelessWidget {
               const SizedBox(
                 width: 13,
               ),
-              const Text(
+              Text(
                 'Katherine',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF0A063C),
-                ),
-              )
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
             ],
           ),
         ),
@@ -227,39 +221,33 @@ class CourseTabs extends StatelessWidget {
   const CourseTabs({Key key, this.tabs}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Positioned(
-            left: 0,
-            bottom: 2,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 1,
-              color: const Color(0xFFD7D6E4),
+  Widget build(BuildContext context) => Container(
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Positioned(
+              left: 0,
+              bottom: 2,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 1,
+                color: const Color(0xFFD7D6E4),
+              ),
             ),
-          ),
-          TabBar(
-            isScrollable: true,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorWeight: 5,
-            indicatorColor: Color(0xFFFF5215),
-            unselectedLabelColor: Color(0xFF8886A9),
-            labelColor: Color(0xFFFF5215),
-            labelStyle: TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+            TabBar(
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 5,
+              indicatorColor: Theme.of(context).accentColor,
+              unselectedLabelColor: const Color(0xFF8886A9),
+              labelColor: Theme.of(context).accentColor,
+              labelStyle: Theme.of(context).textTheme.subtitle1,
+              tabs: tabs.keys.toList(),
             ),
-            tabs: tabs.keys.toList(),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class CourseProgressBar extends StatelessWidget {
@@ -312,11 +300,7 @@ class CourseProgressBar extends StatelessWidget {
               child: Text(
                 progress.getPercent(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.caption,
               ),
             ),
           ],
