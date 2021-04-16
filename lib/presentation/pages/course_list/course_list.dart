@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/application/course_list_bloc/course_list_bloc.dart_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/application/course_list_bloc/course_list_events.dart';
+import 'package:mobile/presentation/widgets/tab_bar.dart';
 import 'package:mobile/theme.dart' as theme;
 
 class CourseListPage extends StatelessWidget {
@@ -39,8 +40,7 @@ class CourseListPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              CourseTabs(tabs: tabs),
-              const SizedBox(height: 21),
+              NoostarTabBar(tabs: tabs.keys.toList()),
               Expanded(
                 child: TabBarView(children: tabs.values.toList()),
               ),
@@ -68,7 +68,7 @@ class _CourseList extends StatelessWidget {
         }
 
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data.courseItems.length) {
               if (!snapshot.data.isLoading) {
@@ -200,69 +200,6 @@ class UserInfo extends StatelessWidget {
           ),
         ),
       );
-}
-
-class CourseTabs extends StatelessWidget {
-  final Map tabs;
-  const CourseTabs({Key key, this.tabs}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Positioned(
-              left: 0,
-              bottom: 2,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 1,
-                color: const Color(0xFFD7D6E4),
-              ),
-            ),
-            TabBar(
-              isScrollable: true,
-              indicator: CircleTabIndicator(color: Theme.of(context).accentColor, radius: 3),
-              unselectedLabelColor: const Color(0xFF8886A9),
-              labelColor: Theme.of(context).accentColor,
-              labelStyle: Theme.of(context).textTheme.subtitle1,
-              tabs: tabs.keys.toList(),
-            ),
-          ],
-        ),
-      );
-}
-
-class CircleTabIndicator extends Decoration {
-  final BoxPainter _painter;
-
-  CircleTabIndicator({@required Color color, @required double radius}) : _painter = _CirclePainter(color, radius);
-
-  @override
-  BoxPainter createBoxPainter([Function() onChanged]) => _painter;
-}
-
-class _CirclePainter extends BoxPainter {
-  final Paint _paint;
-  final double radius;
-
-  _CirclePainter(Color color, this.radius)
-      : _paint = Paint()
-          ..color = color
-          ..isAntiAlias = true;
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration imageConfiguration) {
-    const marginForPlacingIndicatorOnTheLine = 2.5;
-
-    final circleOffset = offset +
-        Offset(
-          imageConfiguration.size.width / 2,
-          imageConfiguration.size.height - marginForPlacingIndicatorOnTheLine,
-        );
-    canvas.drawCircle(circleOffset, radius, _paint);
-  }
 }
 
 class CourseProgressBar extends StatelessWidget {
