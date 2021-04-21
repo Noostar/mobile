@@ -24,10 +24,10 @@ class CourseListPage extends StatelessWidget {
       const Tab(text: 'Recomended'): const _CourseList(),
       const Tab(text: 'Available'): const _CourseList(),
     };
-    return DefaultTabController(
-      length: tabs.keys.length,
-      child: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: DefaultTabController(
+        length: tabs.keys.length,
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,7 +64,9 @@ class _CourseList extends StatelessWidget {
       builder: (context, snapshot) {
         var itemCount = 0;
         if (snapshot.data != null) {
-          itemCount = snapshot.data.hasMore ? snapshot.data.courseItems.length + 1 : snapshot.data.courseItems.length;
+          itemCount = snapshot.data.hasMore
+              ? snapshot.data.courseItems.length + 1
+              : snapshot.data.courseItems.length;
         }
 
         return ListView.builder(
@@ -72,23 +74,19 @@ class _CourseList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data.courseItems.length) {
               if (!snapshot.data.isLoading) {
-                _bloc.addEvent(GetMoreData());
+                _bloc.addEvent(DataRequested());
               }
 
-              return Center(
+              return const Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: EdgeInsets.only(
                     top: 20,
                     bottom: 20,
                   ),
                   child: SizedBox(
                     height: 24,
                     width: 24,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).accentColor,
-                      ),
-                    ),
+                    child: CircularProgressIndicator(),
                   ),
                 ),
               );
@@ -135,12 +133,16 @@ class _CourseListItem extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
-                      colors: [Color(0x00000000), Color(0xD5000000)],
+                      colors: [
+                        theme.transparentBlack,
+                        theme.halfTransparentBlack
+                      ],
                     ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 15, bottom: 30, right: 15),
+                  padding:
+                      const EdgeInsets.only(left: 15, bottom: 30, right: 15),
                   child: Row(
                     children: [
                       Text(title, style: Theme.of(context).textTheme.subtitle1),
@@ -150,7 +152,8 @@ class _CourseListItem extends StatelessWidget {
                         height: 11,
                         decoration: BoxDecoration(
                           color: Theme.of(context).accentColor,
-                          borderRadius: const BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                         ),
                       ),
                     ],
@@ -213,7 +216,7 @@ class CourseProgressBar extends StatelessWidget {
             Container(
               height: 14,
               width: double.infinity,
-              color: const Color(0x59626262),
+              color: theme.halfTransparentGrey,
             ),
             Container(
               height: 14,
@@ -254,7 +257,8 @@ class Percent {
   final double value;
   Percent(this.value);
 
-  String get percentValue => value == value.round() ? '${value.round()}%' : '${value}%';
+  String get percentValue =>
+      value == value.round() ? '${value.round()}%' : '${value}%';
 
   double get valueFromZeroToOne => value * 0.01;
 }
@@ -262,9 +266,9 @@ class Percent {
 extension PercentView on Percent {
   Color get progressColor {
     if (value <= 33) {
-      return const Color(0xFFF2C94C);
+      return theme.yellow;
     } else if (value > 33 && value <= 66) {
-      return const Color(0xFFB1D64B);
+      return theme.lightGreen;
     } else {
       return theme.darkGreen;
     }

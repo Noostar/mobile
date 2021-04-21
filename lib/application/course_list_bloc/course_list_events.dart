@@ -1,3 +1,3 @@
 abstract class CourseListEvent {}
 
-class GetMoreData extends CourseListEvent {}
+class DataRequested extends CourseListEvent {}

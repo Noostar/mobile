@@ -6,7 +6,8 @@ import 'course_list_events.dart';
 import 'course_list_state.dart';
 
 class CourseListBloc {
-  final _stateController = BehaviorSubject<CourseListState>.seeded(CourseListState.initial());
+  final _stateController =
+      BehaviorSubject<CourseListState>.seeded(CourseListState.initial());
   final _finalCount = 60;
   final _itemsPerPage = 20;
   int _currentPage = 0;
@@ -17,7 +18,7 @@ class CourseListBloc {
   void addEvent(CourseListEvent event) => _mapEventToState(event);
 
   void _mapEventToState(CourseListEvent event) async {
-    if (event is GetMoreData) {
+    if (event is DataRequested) {
       final newItems = <String>[];
       final prevState = _stateController.value;
       newItems.addAll([
@@ -48,7 +49,8 @@ class CourseListBloc {
   List<String> _newCourseItems() {
     final lastIndex = _currentPage * _itemsPerPage + 1;
     final list = <String>[];
-    final itemsToDownloadCount = min(_itemsPerPage, _finalCount - _currentPage * _itemsPerPage);
+    final itemsToDownloadCount =
+        min(_itemsPerPage, _finalCount - _currentPage * _itemsPerPage);
     for (var i = lastIndex; i < lastIndex + itemsToDownloadCount; i++) {
       list.add('Course ${i}');
     }
