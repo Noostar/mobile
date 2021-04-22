@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/examples_from_courses/presentation/pages/course_details/course_detaills.dart';
+import 'package:mobile/examples_from_courses/presentation/pages/sign_in/sign_in_form.dart';
 
 class ExampleApp extends StatelessWidget {
   @override
@@ -8,14 +9,6 @@ class ExampleApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: CourseDetails(
-          CourseDetailsData(
-            description: 'Desc',
-            isBought: false,
-            name: 'Course 1',
-            price: 12.23,
-            rating: 4.83,
-          ),
-        ),
+        home: const SignInPage(),
       );
 }
