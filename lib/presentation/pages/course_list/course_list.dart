@@ -5,6 +5,9 @@ import 'package:mobile/application/course_list_bloc/course_list_events.dart';
 import 'package:mobile/presentation/widgets/tab_bar.dart';
 import 'package:mobile/theme.dart' as theme;
 
+import 'course_item.dart';
+import 'percent.dart';
+
 class CourseListPage extends StatelessWidget {
   const CourseListPage({Key key}) : super(key: key);
 
@@ -69,7 +72,10 @@ class _CourseList extends StatelessWidget {
               : snapshot.data.courseItems.length;
         }
 
-        return ListView.builder(
+        return ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(
+            height: 20,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data.courseItems.length) {
@@ -92,7 +98,7 @@ class _CourseList extends StatelessWidget {
               );
             }
 
-            return _CourseListItem(
+            return CourseListItem(
               title: snapshot.data.courseItems[index],
               progress: Percent(75),
             );
@@ -102,69 +108,6 @@ class _CourseList extends StatelessWidget {
       },
     );
   }
-}
-
-class _CourseListItem extends StatelessWidget {
-  final String title;
-  final Percent progress;
-  const _CourseListItem({Key key, this.title, this.progress}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Container(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 20.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomStart,
-              children: <Widget>[
-                Container(
-                  height: 224,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/course_image.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 224,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        theme.transparentBlack,
-                        theme.halfTransparentBlack
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.only(left: 15, bottom: 30, right: 15),
-                  child: Row(
-                    children: [
-                      Text(title, style: Theme.of(context).textTheme.subtitle1),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 11,
-                        height: 11,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).accentColor,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                CourseProgressBar(progress: progress),
-              ],
-            ),
-          ),
-        ),
-      );
 }
 
 class UserInfo extends StatelessWidget {
@@ -192,9 +135,7 @@ class UserInfo extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              const SizedBox(
-                width: 13,
-              ),
+              const SizedBox(width: 13),
               Text(
                 'Katherine',
                 style: Theme.of(context).textTheme.bodyText2,
@@ -203,74 +144,4 @@ class UserInfo extends StatelessWidget {
           ),
         ),
       );
-}
-
-class CourseProgressBar extends StatelessWidget {
-  final Percent progress;
-  const CourseProgressBar({Key key, this.progress}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Container(
-        child: Stack(
-          children: [
-            Container(
-              height: 14,
-              width: double.infinity,
-              color: theme.halfTransparentGrey,
-            ),
-            Container(
-              height: 14,
-              width: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: FractionallySizedBox(
-                widthFactor: progress.valueFromZeroToOne,
-                child: Container(
-                  width: 140,
-                  height: 14,
-                  decoration: BoxDecoration(
-                    borderRadius: (progress.value != 100)
-                        ? const BorderRadius.only(
-                            topRight: Radius.circular(50),
-                            bottomRight: Radius.circular(50),
-                          )
-                        : null,
-                    color: progress.progressColor,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 14,
-              width: double.infinity,
-              child: Text(
-                progress.percentValue,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ),
-          ],
-        ),
-      );
-}
-
-class Percent {
-  final double value;
-  Percent(this.value);
-
-  String get percentValue =>
-      value == value.round() ? '${value.round()}%' : '${value}%';
-
-  double get valueFromZeroToOne => value * 0.01;
-}
-
-extension PercentView on Percent {
-  Color get progressColor {
-    if (value <= 33) {
-      return theme.yellow;
-    } else if (value > 33 && value <= 66) {
-      return theme.lightGreen;
-    } else {
-      return theme.darkGreen;
-    }
-  }
 }
