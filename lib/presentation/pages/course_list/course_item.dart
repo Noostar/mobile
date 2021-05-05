@@ -74,6 +74,13 @@ class CourseTitleRow extends StatelessWidget {
 class CourseProgressBar extends StatelessWidget {
   final Percent progress;
   const CourseProgressBar({Key key, this.progress}) : super(key: key);
+  bool isFinished() {
+    if (progress.value < 100) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Container(
@@ -94,7 +101,7 @@ class CourseProgressBar extends StatelessWidget {
                   width: 140,
                   height: 14,
                   decoration: BoxDecoration(
-                    borderRadius: (progress.value != 100)
+                    borderRadius: isFinished()
                         ? const BorderRadius.only(
                             topRight: Radius.circular(50),
                             bottomRight: Radius.circular(50),
